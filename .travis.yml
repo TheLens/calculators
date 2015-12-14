@@ -3,17 +3,12 @@ sudo: false
 script:
 - echo 'Deploying...'
 deploy:
-  - provider: s3
-    access_key_id: AKIAIWQKYAETOQ2N7CBQ
-    secret_access_key:
-      secure: XGK3oiqAeC3ua3dI+3QDOlQg1mR3aPCAC8Hlrlliw+xwbdzMRDgsFL8neaoMaIGlPn1YcGzdYmB9ZctB24IowSwSkucHIBegLo+PvltdKYxueF5w/r45v8YzSClqSq9rhD774l/icbj8TTE49iMf3df5IFjDXYbmLCLYFxpbIyk=
-    bucket: projects.thelensnola.org
-    endpoint: projects.thelensnola.org.s3-website-us-west-2.amazonaws.com
-    region: us-west-2
-    detect_encoding: true
-    skip_cleanup: true
-    acl: public_read
-    cache_control: "max-age=86400"
-    on:
-      repo: TheLens/calculators
-      branch: master
+  provider: s3
+  access_key_id: AKIAIWQKYAETOQ2N7CBQ
+  secret_access_key:
+    secure: G9Ht8fvAYJJ319qDfTmspg6bRjcjI6ZxDQJrS7cUEjrIG2nPTGRQYBeFoosMi1VqMlHMjvD6LEGysuOQFa/MZV0gBs585GEkyEWnjvldvjBqNbnFUSKb9S6+KbVxZ+Vd/m35I8zKZVyosDz0d7bU3cHRJ8IkxvMUxWn/rCZDBYQL/6mvSlkquXltcHDUhpQrfXlUhKgYcdYO/G+FjmdJDUl4ZdpvTe+Z3ISvAFHBhieScrhENK8c/mlYUOstyfTxx0iq2UtA0J3HBoVFsM1f13ty8jYIqMFtiU3XnnxAZ+jY4JxDJsXlfnhoNe+9kO+O5dD3OAhLYZJV+C2MgBmTkYmxHfIpxBPleeHekLZ0MNsjbw/t8FgrRahRn6taS1pfp5Whf4sMqzz27zx5RBwYCYQGXH2Va62RHw7Vz63C8ZZwbgg2f5V0ZITWpa3flLwkPLYKN8A5P+LfVtH57T9a6H9eWCI08JsgWUWA0xaZtwNfxrrZup3CcV0+pfClF0t6dk9NN1GxpOLGKUvusl9gxrolLDQPsuPIt4+f5jZgFgfNyA1DP7r4ulzbM40EvSQwFG7N2Uce4JvkNTFnhmQVNPUO1hhnAdAjIj+NQ4knj9Brwlhy7vEAhwkjIW+iyHhoXcVaiMN88VLIFh4PCOcD6eEYlAzUgruNcp8bFRoYvuM=
+  bucket: projects.thelensnola.org
+  upload-dir: calculators
+  acl: public_read
+  on:
+    repo: TheLens/calculators
