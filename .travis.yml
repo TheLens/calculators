@@ -1,5 +1,7 @@
 language: python
 sudo: false
+script:
+- echo 'Deploying...'
 deploy:
   - provider: s3
     access_key_id: AKIAIWQKYAETOQ2N7CBQ
