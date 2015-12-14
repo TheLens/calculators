@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>How the library tax would affect your tax bill</title>
+
+  <link rel="stylesheet" href="css/jquery.mobile.min.css">
+  <link rel="stylesheet" href="css/style.css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mobile/1.4.5/jquery.mobile.min.js"></script>
+
+  <script type="text/javascript">
+
+    function setLabels(){
+      var width = $( window ).width();
+       if (width<400){
+         $(".label").css("font-size" , ".74em");
+         $(".billholder").css("font-size" , ".74em");
+         $(".dollarholder").css("font-size" ,".7 em");
+       }else{
+         $(".label").css("font-size" , ".8em");
+         $(".billholder").css("font-size" , ".8em");
+         $(".dollarholder").css("font-size" ,".8 em");
+       }
+    }
+
+    $( document ).ready(function() {
+      setLabels();
+    });
+
+    $( window ).resize(function() {
+      setLabels();
+    });
+
+
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+
+    function calculatePoliceFire(vars, POLICEANDFIRERATE){
+      return parseFloat(parseFloat((vars.amt * (1 / 10)) * (POLICEANDFIRERATE / 1000)));
+    }
+
+
+    function calculate_library_tax(vars, LIBRARYRATE){
+      if (vars.homestead) {
+        if (vars.amt < 75000) {
+          return 0.0;
+        }else{
+          var nonPoliceFire = parseFloat(((vars.amt - 75000) * (1 / 10)) * (LIBRARYRATE / 1000));
+          return nonPoliceFire;
+        }
+      }else{
+        var nonPoliceFire = parseFloat(((vars.amt) * (1 / 10)) * (LIBRARYRATE / 1000));
+        return nonPoliceFire;
+      }
+    }
+
+
+    calculateTax = function(vars, library_bonus) {
+      var homestead = vars.homestead;
+      var bank = vars.bank;
+      var POLICEANDFIRERATE = 10.47;
+      var EASTBANKRATE = 148.67 + library_bonus;
+      var WESTBANKRATE = 149.56 + library_bonus;
+      vars.EASTBANKRATE = EASTBANKRATE; //3.14 is current library rate
+      vars.WESTBANKRATE = WESTBANKRATE; //3.14 is current library rate
+      if (homestead) {
+        return calculateTax_Homestead(vars,POLICEANDFIRERATE);
+      }
+      return calculateTax_NoHomestead(vars,POLICEANDFIRERATE);
+    };
+
+
+    calculateTax_Homestead = function(vars, POLICEANDFIRERATE) {
+      if (vars.amt < 75000) {
+        return parseFloat((vars.amt * .1) * (POLICEANDFIRERATE / 1000)).toFixed(2);
+      }
+      if (vars.bank === 'east') {
+        var nonPoliceFire = parseFloat(((vars.amt - 75000) * (1 / 10)) * ((vars.EASTBANKRATE - POLICEANDFIRERATE) / 1000));
+        var policeFire = calculatePoliceFire(vars, POLICEANDFIRERATE);
+        return (nonPoliceFire + policeFire).toFixed(2);
+      }
+      if (vars.bank === 'west') {
+        var nonPoliceFire = parseFloat(((vars.amt - 75000) * (1 / 10)) * ((vars.WESTBANKRATE - POLICEANDFIRERATE) / 1000));
+        var policeFire = calculatePoliceFire(vars, POLICEANDFIRERATE);
+        return (nonPoliceFire + policeFire).toFixed(2);
+      }
+      return "";
+    };
+
+    calculateTax_NoHomestead = function(vars, POLICEANDFIRERATE) {
+      if (vars.bank === 'east') {
+        return parseFloat(vars.amt * (1 / 10) * (vars.EASTBANKRATE / 1000)).toFixed(2);
+      }
+      if (vars.bank === 'west') {
+        return parseFloat(vars.amt * (1 / 10) * (vars.WESTBANKRATE / 1000)).toFixed(2);
+      }
+      return 0;
+    };
+
+    function reset(){
+      $('#propertyval').val('0');
+      $('#slider').val('10.47');
+      $('#slider').slider('refresh');
+    }
+
+
+    function getVars(){
+    var EASTBANKRATE = 148.77;
+    var WESTBANKRATE = 149.66;
+      var amt = $('#propertyval').val().replace("$", "").replace(",", "").replace(",", "").replace(",", "");
+      var regex  = /^\d+(?:\.\d{0,2})?$/;
+            if (!(regex.test(amt))){
+                   alert("You must enter a dollar amount without a dollar sign. Like: 70000 or 124000.24");
+                   return 0;
+      }
+
+      var homestead = document.getElementById('homestead').checked;
+
+      var bank = "";
+      if(document.getElementById('east_bank_radio').checked) {
+          bank = "east"
+      }else if(document.getElementById('west_bank_radio').checked) {
+        bank = "west"
+      }else{
+        alert("You must select east bank or west bank");
+        return 0;
+      }
+
+      return {"amt": amt, "homestead":homestead, "bank": bank, "EASTBANKRATE": EASTBANKRATE, "WESTBANKRATE": WESTBANKRATE}
+
+    }
+
+
+    function fire(){
+      vars = getVars();
+      var current = calculateTax(vars, 0);
+      document.getElementById('answer').innerHTML="$" + numberWithCommas(current);
+      var proposed = calculateTax(vars, 2.5);
+      document.getElementById('newtax').innerHTML="$" + numberWithCommas(proposed);
+      document.getElementById('currentlibrary').innerHTML="$" + numberWithCommas(calculate_library_tax(vars, 3.14).toFixed(2));
+      document.getElementById('proposedlibrary').innerHTML="$" + numberWithCommas(calculate_library_tax(vars, 5.64).toFixed(2));
+
+      var dif = parseFloat(proposed) - parseFloat(current);
+      document.getElementById('youpay').innerHTML= "You would pay $<span class='bold'>" + numberWithCommas(dif.toFixed(2)) + "</span> more";
+      return false;
+    }
+
+  </script>
+</head>
+
+<body>
+  <div id="calculator">
+    <div data-role="page" id="home">
+      <div data-role=content>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var html = "";
+    html += '<label for="propertyval">Property Value</label>';
+    html += '<input id="propertyval" onchange="fire()" type="text" name="value"/>';
+    html += '<fieldset data-role="controlgroup" data-mini="true"><input type="radio" name="radio-mini" onclick="fire()" id="east_bank_radio" value="east" checked="checked" /><label for="east_bank_radio">East bank</label><input type="radio" name="radio-mini" onclick="fire()" id="west_bank_radio" value="west"  /><label for="west_bank_radio">West bank</label></fieldset>';
+    html += '<label for="homestead">Homestead exemption </label><input onchange="fire()" type=checkbox id="homestead" name="homestead"/>'
+    html += '<a target="_blank" href="http://nolaassessor.com/faq.html#exempt" id="explainer">What is a homestead exemption?</a>';
+    html += '<div id="answerwrapper" class="wrapper">';
+    html += '<div id="answerbox">'
+    html += '<div class="column" id="total">'
+    html += '<div id="totalLabel" class="label"><div class="center billholder">Total Tax Bill</div></div>';
+    html += '<div class="dollarholder"><div class="center dollarfigure" id="answer"></div></div>';
+    html += '<div class="dollarholder"><div class="center dollarfigure" id="newtax"></div></div>';
+    html += '</div>'
+    html += '<div class="column" id="policeandfire">'
+    html += '<div id="policeandfire" class="label center"><div class="center billholder">Library Tax</div></div>';
+    html += '<div class="dollarholder"><div class="center dollarfiguresmall" id="currentlibrary"></div></div>';
+    html += '<div class="dollarholder"><div class="center dollarfiguresmall" id="proposedlibrary"></div></div>';
+    html += '</div>'
+    html += '<div class="column" id="labels">'
+    html += '<div id="placeholder"> </div>';
+    html += '<div class="dollarholder right"><div class="right">Current</div></div>';
+    html += '<div class="dollarholder right"><div class="right">Proposed</div></div>';
+    html += '</div>'
+    html += '<div id="totalbar"><div class="right"><div id="youpay"></div></div></div>';
+    html += '</div>'
+    html += '</div>'
+    html += '<div data-role="footer" data-position="fixed">Note: special taxing districts are not included</div>';
+    $("#home div:jqmData(role=content)").append(html);
+  </script>
+
+</body>
+</html>

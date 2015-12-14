@@ -1,0 +1,17 @@
+language: ruby
+sudo: false
+deploy:
+  - provider: s3
+    access_key_id: AKIAIWQKYAETOQ2N7CBQ
+    secret_access_key:
+      secure: XGK3oiqAeC3ua3dI+3QDOlQg1mR3aPCAC8Hlrlliw+xwbdzMRDgsFL8neaoMaIGlPn1YcGzdYmB9ZctB24IowSwSkucHIBegLo+PvltdKYxueF5w/r45v8YzSClqSq9rhD774l/icbj8TTE49iMf3df5IFjDXYbmLCLYFxpbIyk=
+    bucket: projects.thelensnola.org
+    endpoint: projects.thelensnola.org.s3-website-us-west-2.amazonaws.com
+    region: us-west-2
+    detect_encoding: true
+    skip_cleanup: true
+    acl: public_read
+    cache_control: "max-age=86400"
+    on:
+      repo: TheLens/calculators
+      branch: master

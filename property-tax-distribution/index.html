@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Police and fire millage calculator</title>
+
+  <!-- Load css for c3 basic styles -->
+  <link rel="stylesheet" type="text/css" href="css/c3.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-mobile/1.4.5/jquery.mobile.min.css">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+
+  <!-- Load d3.js and c3.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
+  <script src="js/c3.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mobile/1.4.5/jquery.mobile.js"></script>
+
+</head>
+
+<body onload="makeChart(0)">
+
+  <div id="calculator">
+    <div data-role="page" id="home">
+      <div data-role="content">
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var html = "";
+    html += '<label for="propertyval">Property Value</label>';
+    html += '<input id="propertyval" onchange="fire()" type="text" name="value"/>';
+    html += '<fieldset data-role="controlgroup" data-mini="true"><input type="radio" name="radio-mini" onclick="fire()" id="east_bank_radio" value="east" checked="checked" /><label for="east_bank_radio">East bank</label><input type="radio" name="radio-mini" onclick="fire()" id="west_bank_radio" value="west"  /><label for="west_bank_radio">West bank</label></fieldset>';
+    html += '<label for="homestead">Homestead exemption</label><input onchange="fire()" type=checkbox id="homestead" name="homestead"/>'
+    html += '<a target="_blank" href="http://nolaassessor.com/faq.html#exempt" id="explainer"><br>What is a homestead exemption?</a>';
+    html += '<p id="answer">Total tax: $0.00</p>';
+    html += '<div data-role="footer" data-position="fixed">Source: Orleans Parish Assessor.<br>Note: special taxing districts are not included</div>';
+    html += '<div id="chartwrapper"><p class="middle">Where does your money go?</p><div id="chart" margin-left:auto; margin-right:auto"></div></div>';
+    $("#home div:jqmData(role=content)").append(html);
+
+    function makeChart(amt) {
+
+      var levee_east = 11.67;
+      var levee_west = 12.76;
+      var leveerate = 0;
+
+      if (document.getElementById('east_bank_radio').checked) {
+      	leveerate = levee_east;
+    	} else if (document.getElementById('west_bank_radio').checked) {
+      	leveerate = levee_west;
+      }
+
+      var homestead = document.getElementById('homestead').checked;
+
+      var rates = new Array();
+      rates.push({name: 'Police_and_Fire_(No_homestead)', val: 10.47});
+      rates.push({name: 'Police_and_Fire', val: 6.4});
+      rates.push({name: 'General_Fund', val: 15.1});
+      rates.push({name: 'Public_Library', val: 3.14});
+      rates.push({name: 'City bond debt', val: 25.5});
+      rates.push({name: 'Sewerage_&_Water_Board', val: 16.43});
+      rates.push({name: 'Audubon_Zoo', val: .32});
+      rates.push({name: 'Audubon_Aquarium', val: 2.99});
+      rates.push({name: 'School_Board', val: 45.31});
+      rates.push({name: 'Levee_Board', val: leveerate});
+      rates.push({name: 'Law_Enforcement', val: 2.9});
+      rates.push({name: 'Economic_Development', val: 1.82});
+      rates.push({name: 'Parkway_and_Recreation_Department', val: 3});
+      rates.push({name: 'Capital_Improvement', val: 1.82});
+      rates.push({name: 'Street_and_Traffic_Control', val: 1.9});
+
+      rates = rates.sort(function(a, b) {
+        return a.val - b.val;
+      });
+
+      var vals = new Array();
+      var categories = new Array();
+      vals.push("Dollars")
+
+      $.each(rates, function(index, obj) {
+        if (homestead && obj.name.indexOf("homestead") == -1) {  // Excludes the Police_and_Fire_(No_homestead)
+           newamt = amt - 75000;
+           if (newamt < 0) {
+             newamt = 0;
+      	   }
+           vals.push(((obj.val / 1000) * newamt * 0.1).toFixed(2));
+        } else {
+           vals.push(((obj.val / 1000) * amt * 0.1).toFixed(2));
+        }
+        categories.push(obj.name.split('_').join(' '));
+      });
+
+      var chart = c3.generate({
+        data: {
+          columns: [
+              vals
+          ],
+          type: 'bar',
+        	colors: {
+            Dollars: '#B43018'
+        	},
+        	labels: {
+            format: {
+              y: d3.format("$.2f")
+            }
+          }
+        },
+        tooltip: {
+          show: false
+        },
+        bar: {},
+        legend: {
+          show: false
+        },
+        axis: {
+          x: {
+            type: 'categorized',
+            categories: categories
+          },
+          rotated: true,
+          y: {
+          	tick: {
+          		format: d3.format("$d"),
+          		count: 4
+          	}
+    		  }
+        },
+        padding: {
+      		left: 200,
+      		right: 10
+    	  }
+      });
+    }
+
+    var EASTBANKRATE,
+        POLICEANDFIRERATE,
+        WESTBANKRATE,
+        calculateTax,
+        calculateTax_Homestead,
+        calculateTax_NoHomestead;
+
+    EASTBANKRATE = 148.77;
+    WESTBANKRATE = 149.66;
+    POLICEANDFIRERATE = 10.47;
+
+    calculateTax = function(value, homestead, bank) {
+      if (homestead) {
+        return calculateTax_Homestead(value, bank);
+      }
+
+      return calculateTax_NoHomestead(value, bank);
+    };
+    calculateTax_Homestead = function(value, bank) {
+      if (value < 75000) {
+        return parseFloat((value * .1) * (POLICEANDFIRERATE / 1000)).toFixed(2);
+      }
+
+      if (bank === 'east') {
+      	var nonPoliceFire = parseFloat(((value - 75000) * (1 / 10)) * ((EASTBANKRATE - POLICEANDFIRERATE) / 1000));
+      	var policeFire = parseFloat(parseFloat((value * (1 / 10)) * (POLICEANDFIRERATE / 1000)));
+      	return (nonPoliceFire + policeFire).toFixed(2);
+      }
+
+      if (bank === 'west') {
+      	var nonPoliceFire = parseFloat(((value - 75000) * (1 / 10)) * ((WESTBANKRATE - POLICEANDFIRERATE) / 1000));
+      	var policeFire = parseFloat(parseFloat((value * (1 / 10)) * (POLICEANDFIRERATE / 1000)));
+        return (nonPoliceFire + policeFire).toFixed(2);
+      }
+
+      return "";
+    };
+    calculateTax_NoHomestead = function(value, bank) {
+      if (bank === 'east') {
+        return parseFloat(value * (1 / 10) * (EASTBANKRATE / 1000)).toFixed(2);
+      }
+
+      if (bank === 'west') {
+        return parseFloat(value * (1 / 10) * (WESTBANKRATE / 1000)).toFixed(2);
+      }
+
+      return Number.NaN;
+    };
+
+    function fire() {
+    	var amt = $('#propertyval').val().replace(/\$/g, '').replace(/,/g, '');
+
+    	if (amt == "") {
+    		amt = 0;
+    	}
+
+    	var regex  = /^\d+(?:\.\d{0,2})?$/;
+
+      if (!(regex.test(amt))) {
+        alert("You must enter a dollar amount without a dollar sign. Like: 70000 or 124000.24");
+        return;
+      }
+
+    	var homestead = document.getElementById('homestead').checked;
+    	var a;
+    	var bank = "";
+
+    	if (document.getElementById('east_bank_radio').checked) {
+      		bank = "east"
+    	} else if (document.getElementById('west_bank_radio').checked) {
+    		bank = "west"
+    	} else {
+    		alert("You must select east bank or west bank");
+    		return;
+    	}
+
+    	a = calculateTax(amt, homestead, bank);
+    	document.getElementById('answer').innerHTML = "Total tax: $" + a;
+    	makeChart(amt);
+
+    	return false;
+    }
+
+    $(window).resize(function() {
+      fire();
+    });
+
+  </script>
+
+</body>
+</html>

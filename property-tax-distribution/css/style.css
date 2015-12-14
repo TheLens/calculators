@@ -1,0 +1,19 @@
+body {
+  overflow:hidden;
+  font-family: "news-gothic-std", Helvetica, Arial, sans-serif;
+}
+
+#answer {
+  float: right;
+  font-weight: bold;
+  border-top: 1px solid black;
+}
+
+.middle {
+  font-size: 1.4em;
+  font-weight: bold;
+}
+
+#chart {
+  border: 1px solid black;
+}
