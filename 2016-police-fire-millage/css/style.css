@@ -1,0 +1,87 @@
+html,
+body {
+  font-family: "minion-pro", Georgia, "Times New Roman", Times, serif;
+}
+
+label {
+  font-size: 1.1em;
+}
+input[type='text'] {
+  font-size: 16px;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+table,
+thead,
+table thead,
+tbody,
+tr,
+th,
+td,
+.even,
+.alt,
+table tr:nth-of-type(even) {
+  border: 0;
+  background: inherit;
+  background-color: inherit;
+}
+
+.title {
+  font-size: 2em;
+  line-height: 1.2em;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 13.5px;
+}
+
+.intro-text {
+  font-size: 1em;
+  padding-top: 10px;
+  padding-bottom: 30px;
+}
+
+.question {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.big-label {
+  font-size: 1.5em;
+  line-height: 1em;
+}
+.tiny-label {
+  font-size: 0.8em;
+  line-height: 1.4em;
+}
+@media screen and (max-width: 600px) {
+  .tiny-label {
+    padding: 5px 0;
+  }
+}
+
+.radio-button-group {
+  padding-top: 10px;
+}
+
+.results-table {
+  max-width: 600px;
+}
+
+.results {
+  padding-top: 20px;
+}
+
+.bold {
+  font-weight: bold;
+}
+.highlight {
+  /*font-weight: bold;*/
+  font-size: 1.1em;
+  padding: 3px;
+  border-radius: 3px;
+  background-color: goldenrod;
+}
+
+.radio_group {
+  display: inline-block;
+}
