@@ -1,3 +1,6 @@
+__"Use our tax calculator to determine what effect proposed increase would have"__
+
+http://thelensnola.org/2016/01/08/use-our-tax-calculator-to-determine-what-effect-proposed-increase-would-have/
 
 __"Even if voters reject proposed library tax, options for increased funding still exist" (April 24, 2015)__
 
