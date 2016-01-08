@@ -1,4 +1,4 @@
-__"Use our tax calculator to determine what effect proposed increase would have"__
+__"Use our tax calculator to determine what effect proposed increase would have (Jan. 8, 2016)"__
 
 http://thelensnola.org/2016/01/08/use-our-tax-calculator-to-determine-what-effect-proposed-increase-would-have/
 
