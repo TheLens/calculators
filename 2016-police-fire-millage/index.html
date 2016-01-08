@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
   <title>Police and fire property tax calculator</title>
   <meta charset="utf-8">
@@ -13,25 +11,25 @@
 
   <!-- CSS -->
   <link rel="stylesheet" href="https://s3-us-west-2.amazonaws.com/lensnola/realestate/css/foundation.min.css">
-
   <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
   <div class="row">
-    <div class="small-12 columns title">What would the proposed property tax cost you?</div>
-  </div>
-  <div class="row">
-    <div class="small-12 columns intro-text">
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-    </div>
+    <div class="small-12 columns title">What the proposed property tax would cost you</div>
   </div>
 
   <div class="row">
-    <div class="small-12 large-7 columns question">
-      <label for="property_value"><span class="big-label">What is the assessed value of your property?</span></label>
+    <p class="small-12 columns intro-text">
+      The proposed property tax ordinance would increase your tax bill by 7.5 mills, with 2.5 of that going to the New Orleans Fire Department and the remaining 5.0 mills going to the New Orleans Police Department.
+    </p>
+  </div>
+
+  <div class="row">
+    <div class="small-12 medium-9 large-6 columns question">
+      <label for="property_value"><span class="big-label">What is the value of your property?</span></label>
       <div class="tiny-label">Don't know? Visit the <a href="http://nolaassessor.com/search.html"><span class="hide-for-small-only">Orleans Parish </span>Assessor's Office's website</a>.</div>
-      <input id="property_value" type="text" name="property_value" value="$" oninput="update()">
+      <input id="property_value" type="text" name="property_value" value="$" maxlength="13" size="13">
     </div>
   </div>
 
@@ -39,162 +37,50 @@
     <div class="small-12 large-7 columns question">
       <label><span class="big-label">On which side of the river is your property?</span></label>
       <div class="radio-button-group">
-        <input id="east_bank_radio" name="bank" type="radio" value="east" onclick="update()" checked><label for="east_bank_radio">East bank</label>
-        <input id="west_bank_radio" name="bank" type="radio" value="west" onclick="update()"><label for="west_bank_radio">West bank</label>
+        <input id="east_bank_radio" name="bank" type="radio" value="east" checked><label for="east_bank_radio">East bank</label>
+        <input id="west_bank_radio" name="bank" type="radio" value="west"><label for="west_bank_radio">West bank</label>
       </div>
     </div>
   </div>
 
   <div class="row">
-    <div class="small-12 columns results" id="results">
-      <!-- <p>
-        With an assessed value of <span id="assessed-value"></span>, you currently pay about <span id="current_total"></span> in property taxes each year. Of that, <span id="current_police"></span> goes to the New Orleans Police Department and <span id="current_fire"></span> goes to the New Orleans Fire Department.
-      </p> -->
+    <div class="small-12 large-9 columns question">
+      <label><span class="big-label">Do you have a homestead exemption?</span> <span class="tiny-label"><a href="http://nolaassessor.com/faq.html#About:32the:32Homestead:32Exemption">(What's this?)</a></span></label>
+      <div class="radio-button-group">
+        <input id="yes_radio" name="homestead" type="radio" value="yes" checked><label for="yes_radio">Yes</label>
+        <input id="no_radio" name="homestead" type="radio" value="no"><label for="no_radio">No</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="small-12 columns">
       <p>
-        If the proposed millage passes in the April election, you will pay an <span class="bold">additional <span class="highlight" id="total_diff"></span></span> in taxes per year, with <span id="police_diff"></span> of that going to the police department and <span id="fire_diff"></span> going to the fire department. Over the 12-year lifespan of the ordinance, you will pay a <span class="bold">total of <span class="highlight" id="twelve-year-total"></span></span> as a result of this millage, in current dollars.
+        If the proposed millage passes, you would pay an <span class="bold">additional <span class="highlight" id="total_diff">$0.00</span> per year</span> in taxes, with <span id="police_diff">$0.00</span> of that going to the police department and <span id="fire_diff">$0.00</span> going to the fire department. This would be <span class="bold"><span class="highlight" id="twelve-year-total">$0.00</span> in total</span> over the 12-year lifespan of the ordinance, in current dollars.
+      </p>
+      <p>
+        This would increase your total tax bill from about <span class="bold"><span class="highlight" id="current_total">$0</span> per year</span> to <span class="bold"><span class="highlight" id="proposed_total">$0</span> per year</span>.
       </p>
     </div>
   </div>
 
-  <!-- <div class="credit">
-    <div class="byline">Thomas Thoren</div>
-    <div class="source">Source: Louisiana Department of Education</div>
-  </div> -->
+  <div class="row">
+    <div class="small-12 columns credit">
+      By Thomas Thoren | Sources: Louisiana Legislative Auditor, Orleans Parish Assessor's Office.<br>
+      All numbers are in current dollars. Total tax bill numbers exclude any special taxing districts. Properties are assumed to be residential.
+    </div>
+  </div>
 
   <!-- JavaScript -->
   <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
   <script type="text/javascript" src="https://s3-us-west-2.amazonaws.com/lensnola/realestate/js/foundation.min.js"></script>
   <script type="text/javascript" src="https://s3-us-west-2.amazonaws.com/lensnola/realestate/js/modernizr.js"></script>
-  <script type="text/javascript">
-      $(document).foundation();
-  </script>
   <script src="//d3js.org/d3.v3.min.js"></script>
-  <script type="text/javascript">
+  <script type="text/javascript" src="https://s3-us-west-2.amazonaws.com/projects.thelensnola.org/external-libraries/js/pym.min.js"></script>
 
-  var current_overall_millage_east = 151.78,  // TODO: Double-check
-      current_overall_millage_west = 145.71,  // TODO: Double-check
-      current_police_millage = 5.26,  // TODO: Double-check
-      curent_fire_millage = 5.21,  // TODO: Double-check
-      proposed_police_millage = 5.0,
-      proposed_fire_millage = 2.5;
+  <script type="text/javascript">$(document).foundation();</script>
+  <script type="text/javascript">var pymChild = new pym.Child();</script>
 
-  var formatCount = d3.format(",.2f");  // Commas with two decimal points.
-
-  function calculateCurrentPoliceFireTax(vars) {
-    return parseFloat(vars.amount * 0.1 * (current_police_millage + curent_fire_millage) * 0.001);
-  }
-  function calculateCurrentPoliceTax(vars) {
-    return parseFloat(vars.amount * 0.1 * current_police_millage * 0.001);
-  }
-  function calculateCurrentFireTax(vars) {
-    return parseFloat(vars.amount * 0.1 * curent_fire_millage * 0.001);
-  }
-
-  function calculateProposedPoliceFireTax(vars) {
-    return parseFloat(vars.amount * 0.1 * (proposed_police_millage + proposed_fire_millage) * 0.001);
-  }
-  function calculateProposedPoliceTax(vars) {
-    return parseFloat(vars.amount * 0.1 * proposed_police_millage * 0.001);
-  }
-  function calculateProposedFireTax(vars) {
-    return parseFloat(vars.amount * 0.1 * proposed_fire_millage * 0.001);
-  }
-
-  function calculateCurrentTotalTax(vars) {
-    // Calculates the current total tax bill, depending on location.
-    var bank = vars.bank;
-
-    var current_overall_millage = bank === 'east'
-      ? current_overall_millage_east
-      : current_overall_millage_west;
-
-    // Calculate based on overall millage.
-    return parseFloat(vars.amount * 0.1 * current_overall_millage * 0.001);
-  }
-  function calculateProposedTotalTax(vars) {
-        // Calculates the current total tax bill, depending on location.
-    var bank = vars.bank;
-
-    var current_overall_millage = bank === 'east'
-      ? current_overall_millage_east
-      : current_overall_millage_west;
-
-    proposed_overall_millage = current_overall_millage + proposed_police_millage + proposed_fire_millage;
-
-    // Calculate based on overall millage.
-    return parseFloat(vars.amount * 0.1 * proposed_overall_millage * 0.001);
-  }
-
-  function getVariables() {
-    var bank;
-    var amount = $('#property_value').val().replace(/[,$]/g, '');
-
-    // var regex = /^\d+(?:\.\d{0,2})?$/;
-    // if (!(regex.test(amount))) {
-    //   console.log("You must enter an amount, such as 70000, 124,000.24 or $150,000.");
-    //   amount = 0;
-    // }
-
-    if (document.getElementById('east_bank_radio').checked) {
-      bank = $('#east_bank_radio').val();
-    } else if (document.getElementById('west_bank_radio').checked) {
-      bank = $('#west_bank_radio').val();
-    }
-
-    return {"amount": amount, "bank": bank}
-  }
-
-  function update() {
-    vars = getVariables();
-
-    var current_total = calculateCurrentTotalTax(vars);
-    var proposed_total = calculateProposedTotalTax(vars);
-
-    var current_police = calculateCurrentPoliceTax(vars);
-    var current_fire = calculateCurrentFireTax(vars);
-    // var current_police_and_fire = calculateCurrentPoliceFireTax(vars);
-
-    var proposed_police = calculateProposedPoliceTax(vars);
-    var proposed_fire = calculateProposedFireTax(vars);
-    // var proposed_police_and_fire = calculateProposedPoliceFireTax(vars);
-
-    var total_diff = parseFloat(proposed_total) - parseFloat(current_total);
-
-    var twelve_year_total = total_diff * 12;
-
-    // document.getElementById('assessed-value').innerHTML = "$" + formatCount(vars.amount);
-
-    // document.getElementById('current_total').innerHTML = "$" + formatCount(current_total);
-    // document.getElementById('current_police').innerHTML = "$" + formatCount(current_police);
-    // document.getElementById('current_fire').innerHTML = "$" + formatCount(current_fire);
-
-    document.getElementById('total_diff').innerHTML = "$" + formatCount(total_diff);
-    document.getElementById('police_diff').innerHTML = "$" + formatCount(proposed_police);
-    document.getElementById('fire_diff').innerHTML = "$" + formatCount(proposed_fire);
-
-    document.getElementById('twelve-year-total').innerHTML = "$" + formatCount(twelve_year_total);
-
-  }
-
-  function formatCurrency(number) {
-    var n = number.split('').reverse().join("");
-    var n2 = n.replace(/\d\d\d(?!$)/g, "$&,");
-    var return_val = '$' + n2.split('').reverse().join('');
-    return return_val;
-  }
-
-  $('#property_value').on('input', function () {
-    $(this).val(formatCurrency(this.value.replace(/[,$]/g, '')));
-  }).on('keypress', function (e) {
-    if (!$.isNumeric(String.fromCharCode(e.which)) && (e.which !== 8)) {
-      e.preventDefault();
-    }
-  });
-
-  update();
-
-  </script>
-
+  <script type="text/javascript" src="js/app.js"></script>
 </body>
-
 </html>

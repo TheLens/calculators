@@ -1,6 +1,8 @@
 html,
 body {
   font-family: "minion-pro", Georgia, "Times New Roman", Times, serif;
+  height: auto;
+  max-width: 850px;
 }
 
 label {
@@ -11,38 +13,32 @@ input[type='text'] {
   font-family: Helvetica, Arial, sans-serif;
 }
 
-table,
-thead,
-table thead,
-tbody,
-tr,
-th,
-td,
-.even,
-.alt,
-table tr:nth-of-type(even) {
-  border: 0;
-  background: inherit;
-  background-color: inherit;
+a,
+a:focus,
+a:visited,
+a:active {
+  color: #B43018;
 }
+a:hover {
+  text-decoration: underline;
+}
+
+.columns { padding-left: 0; }
 
 .title {
   font-size: 2em;
   line-height: 1.2em;
-  padding-top: 10px;
   padding-bottom: 10px;
-  padding-left: 13.5px;
 }
 
 .intro-text {
   font-size: 1em;
   padding-top: 10px;
-  padding-bottom: 30px;
 }
 
 .question {
-  padding-top: 15px;
-  padding-bottom: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .big-label {
@@ -50,38 +46,35 @@ table tr:nth-of-type(even) {
   line-height: 1em;
 }
 .tiny-label {
-  font-size: 0.8em;
+  font-size: 0.9em;
   line-height: 1.4em;
-}
-@media screen and (max-width: 600px) {
-  .tiny-label {
-    padding: 5px 0;
-  }
+  padding-top: 2px;
+  padding-bottom: 2px;
 }
 
 .radio-button-group {
   padding-top: 10px;
 }
 
-.results-table {
-  max-width: 600px;
-}
-
-.results {
-  padding-top: 20px;
-}
-
 .bold {
   font-weight: bold;
 }
 .highlight {
-  /*font-weight: bold;*/
   font-size: 1.1em;
   padding: 3px;
   border-radius: 3px;
-  background-color: goldenrod;
+  background-color: gold;
 }
 
-.radio_group {
-  display: inline-block;
+.credit {
+  font-size: 0.9em;
+  color: dimgray;
+  border-top: 1px solid lightgray;
+  padding-top: 10px;
+}
+
+@media screen and (max-width: 600px) {
+  .tiny-label {
+    padding: 5px 0;
+  }
 }
